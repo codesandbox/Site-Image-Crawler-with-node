@@ -60,5 +60,5 @@ const crawl = async ({ url }: any) => {
 };
 
 crawl({
-	url: "https://www.obinnaspeaks.dev/", // Add Site URL here
+	url: "", // Add Site URL here
 });
