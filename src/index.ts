@@ -4,7 +4,7 @@ import * as fs from "fs"; // write to filesystem... We can use this to add downl
 import * as path from "path";
 import * as urlParser from "url";
 
-const checkURL = (link: string, host:any, protocol:any) => {
+const checkURL = (link: string, host?: string, protocol?: string) => {
 	// Check that each link you are crawlling is appendable
 	if (link.includes(`http`)) {
 		return link;
@@ -17,12 +17,19 @@ const checkURL = (link: string, host:any, protocol:any) => {
 
 const seenURL: any = {};
 
-const crawl = async ({ url }: any) => {
+// console.log(typeof seenURL);
+
+const crawl = async ({ url }: { url: string }) => {
 	if (seenURL[url]) return;
 	console.log("crawling", url);
 	seenURL[url] = true;
 
-	const { host, protocol }: any = urlParser.parse(url);
+	type ParserType = {
+		host: string;
+		protocol: string;
+	};
+
+	const { host, protocol }: ParserType = urlParser.parse(url) as ParserType;
 
 	const response = await fetch(url);
 	const html = await response.text();
@@ -54,7 +61,7 @@ const crawl = async ({ url }: any) => {
 		.filter((link) => link.includes(host))
 		.forEach((link) => {
 			crawl({
-				url: checkURL(link,host,protocol),
+				url: checkURL(link, host, protocol),
 			});
 		});
 };
